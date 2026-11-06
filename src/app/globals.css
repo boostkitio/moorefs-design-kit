@@ -1,0 +1,659 @@
+@import "tailwindcss";
+
+@theme {
+  /* Base tokens: teal, the original "open door" brand. Pastel is the default
+     look since 5 November 2026 (data-look="pastel" on <html>). Token names come
+     from it: harbour = the main colour, sun = the warm accent (on harbour
+     only, never as text on white), sun-deep = stars and small marks,
+     sky = light panels, door-sun = the sun in the doorway logo. */
+  --color-harbour: #0f4c5c;
+  --color-harbour-dark: #0b3a47;
+  --color-sun: #f2c14e;
+  --color-sun-deep: #e0a21c;
+  --color-coral: #e86f52;
+  --color-sky: #dcebf0;
+  --color-sky-soft: #eef5f8;
+  --color-ink: #10232a;
+  --color-body: #24414a;
+  --color-muted: #3d5a63;
+  --color-line: #c5d7dd;
+  --color-field: #6f8f99;
+  --color-door-sun: #e0a21c;
+
+  /* Bricolage for every heading and the "moore" wordmark, Figtree for body
+     text: two fonts in every look (Matt, 30 October 2026). */
+  --font-weight-extrabold: 800;
+
+  /* Stronger curves than the CSS defaults (Emil Kowalski's values).
+     ease-out for things entering or responding to a press, ease-in-out for
+     things moving on screen. Never ease-in for UI. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Looks: one site, one set of content, three colour variants of the doorway
+   brand for Adam to choose from (30 October 2026). ?look=teal (the default
+   above), ?look=brick or ?look=cream sets data-look on <html> (script in
+   layout.tsx). Logo, fonts and layout are the same in all three; only the
+   colours change. Never put content behind a look.
+
+   The selectors are not tied to <html>, so /brand can show all three side by
+   side by putting data-look on a section. The teal block repeats the
+   defaults for that reason. */
+[data-look="teal"] {
+  --color-harbour: #0f4c5c;
+  --color-harbour-dark: #0b3a47;
+  --color-sun: #f2c14e;
+  --color-sun-deep: #e0a21c;
+  --color-coral: #e86f52;
+  --color-sky: #dcebf0;
+  --color-sky-soft: #eef5f8;
+  --color-ink: #10232a;
+  --color-body: #24414a;
+  --color-muted: #3d5a63;
+  --color-line: #c5d7dd;
+  --color-field: #6f8f99;
+  --color-door-sun: #e0a21c;
+}
+
+/* Brick: warm terracotta with a sand-gold accent and blush panels. Brick
+   passes 7:1 for text on white. */
+[data-look="brick"] {
+  --color-harbour: #8f3f26;
+  --color-harbour-dark: #6f2f1b;
+  --color-sun: #f4c27a;
+  --color-sun-deep: #c9772f;
+  --color-coral: #c8643f;
+  --color-sky: #f6e9e1;
+  --color-sky-soft: #fbf4ef;
+  --color-ink: #2a1a14;
+  --color-body: #43302a;
+  --color-muted: #5e4a42;
+  --color-line: #e6d3c8;
+  --color-field: #8f7a70;
+  --color-door-sun: #e9a23b;
+}
+
+/* Adam's cream and light green palette (his ChatGPT mock-up, 29 October 2026).
+   Olive passes 4.5:1 for text on white and on the ivory background;
+   champagne is for accents and buttons, never text. */
+[data-look="cream"] {
+  --color-harbour: #526747;
+  --color-harbour-dark: #3f5137;
+  --color-sun: #d4c6ad;
+  --color-sun-deep: #7f9a78;
+  --color-sky: #e7ede3;
+  --color-sky-soft: #f1f3ec;
+  --color-ink: #292d29;
+  --color-body: #363b36;
+  --color-muted: #50574f;
+  --color-line: #d8ddd0;
+  --color-field: #7a8277;
+  /* Champagne is too pale for the sun on a white doorway, so a deeper one. */
+  --color-door-sun: #c4ab7f;
+}
+
+/* Bolder looks (Matt, 5 November 2026: "be bolder"). Each main colour passes
+   4.5:1 for text on white and on its own panel colour, and ink passes on the
+   accent. Same rules as above: the accent sits on the main colour only. */
+[data-look="cobalt"] {
+  --color-harbour: #1f3fd1;
+  --color-harbour-dark: #1631a8;
+  --color-sun: #ffd23f;
+  --color-sun-deep: #e8a90c;
+  --color-coral: #ff6b4a;
+  --color-sky: #e3e8fc;
+  --color-sky-soft: #f1f4fe;
+  --color-ink: #0d1640;
+  --color-body: #222c5c;
+  --color-muted: #3b4675;
+  --color-line: #c9d2f5;
+  --color-field: #6a76a8;
+  --color-door-sun: #f2b705;
+}
+
+[data-look="berry"] {
+  --color-harbour: #b5124f;
+  --color-harbour-dark: #8e0d3d;
+  --color-sun: #ffc845;
+  --color-sun-deep: #e89b0c;
+  --color-coral: #ff6b4a;
+  --color-sky: #fbe4ec;
+  --color-sky-soft: #fdf2f6;
+  --color-ink: #2a0a17;
+  --color-body: #4a1f30;
+  --color-muted: #66394b;
+  --color-line: #f2cbd9;
+  --color-field: #9a6a7d;
+  --color-door-sun: #f2a900;
+}
+
+[data-look="violet"] {
+  --color-harbour: #5b2be0;
+  --color-harbour-dark: #4620b5;
+  --color-sun: #d4f55c;
+  --color-sun-deep: #8fb81a;
+  --color-coral: #ff6b4a;
+  --color-sky: #ebe5fd;
+  --color-sky-soft: #f5f2fe;
+  --color-ink: #1a0f3d;
+  --color-body: #31265c;
+  --color-muted: #4b4175;
+  --color-line: #d8cdfa;
+  --color-field: #7a70a8;
+  --color-door-sun: #a8d42a;
+}
+
+[data-look="red"] {
+  --color-harbour: #c8102e;
+  --color-harbour-dark: #9e0c24;
+  --color-sun: #ffd23f;
+  --color-sun-deep: #e8a90c;
+  --color-coral: #ff6b4a;
+  --color-sky: #fde6e8;
+  --color-sky-soft: #fef3f4;
+  --color-ink: #2b0a0f;
+  --color-body: #4a2027;
+  --color-muted: #673a41;
+  --color-line: #f5cdd2;
+  --color-field: #9a6b72;
+  --color-door-sun: #f2b705;
+}
+
+/* Pastel (Matt, 5 November 2026): his five-colour pastel palette, #d7e5b6
+   lime, #c9dfcd sage, #aadcc7 mint, #abdee0 aqua and #c0def7 blue. Pastels
+   cannot carry white text or be text on white, so deep navy does the text,
+   buttons and logo, and the coloured bands turn pastel with navy text. */
+[data-look="pastel"] {
+  --pastel-navy: #1e3a5f;
+  --color-harbour: #1e3a5f;
+  --color-harbour-dark: #142a45;
+  --color-sun: #d7e5b6;
+  --color-sun-deep: #2f7f86;
+  --color-coral: #d9603f;
+  --color-sky: #c0def7;
+  --color-sky-soft: #e6f1fb;
+  --color-ink: #13263d;
+  --color-body: #2c4560;
+  --color-muted: #475e78;
+  --color-line: #b9d0e4;
+  --color-field: #6b829c;
+  --color-door-sun: #4fb7bb;
+}
+
+/* Inside a band the tokens flip: the band colour becomes the pastel, and
+   "white" and "sky" text become navy, so the markup needs no changes. */
+[data-look="pastel"] .bg-harbour,
+[data-look="pastel"] .bg-harbour-dark {
+  --color-harbour: #abdee0;
+  --color-harbour-dark: #aadcc7;
+  --color-white: var(--pastel-navy);
+  --color-sky: #2c4560;
+}
+/* Buttons and links filled with the main colour stay navy with white text. */
+[data-look="pastel"] :is(a, button).bg-harbour {
+  --color-harbour: var(--pastel-navy);
+  --color-harbour-dark: #142a45;
+  --color-white: #ffffff;
+}
+[data-look="pastel"] footer.bg-harbour {
+  --color-harbour: #c9dfcd;
+  --color-sun: var(--pastel-navy);
+}
+[data-look="pastel"] .bg-harbour-dark {
+  --color-harbour-dark: #aadcc7;
+}
+/* The site-wide buttons sit on pastel, so the main one is navy. */
+[data-look="pastel"] .btn-sun {
+  background: var(--pastel-navy);
+  color: #ffffff;
+}
+[data-look="pastel"] .btn-outline-light {
+  background: rgb(255 255 255 / 0.6);
+  color: var(--pastel-navy);
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-look="pastel"] .btn-sun:hover {
+    background: #2b4f7c;
+  }
+  [data-look="pastel"] .btn-outline-light:hover {
+    background: rgb(255 255 255 / 0.85);
+  }
+}
+[data-look="pastel"] .bg-harbour .text-sun {
+  color: var(--pastel-navy);
+}
+[data-look="pastel"] .bg-harbour :focus-visible {
+  outline-color: var(--pastel-navy);
+}
+
+/* Modern pastel (Matt, 5 November 2026): a four-colour board, #c8d5c0
+   pistachio, #c9dce8 powder blue, #f1e3a8 butter yellow and #e8c9c8 dusty
+   blush. Same band token-flip as pastel, with deep green-charcoal for text,
+   buttons and the logo. */
+[data-look="modern"] {
+  --modern-ink: #2c3b33;
+  --color-harbour: #2c3b33;
+  --color-harbour-dark: #1f2b25;
+  --color-sun: #f1e3a8;
+  --color-sun-deep: #7d6414;
+  --color-coral: #b5524e;
+  --color-sky: #e8c9c8;
+  --color-sky-soft: #f6e9e8;
+  --color-ink: #1d2721;
+  --color-body: #34443b;
+  --color-muted: #55635b;
+  --color-line: #ddd2c8;
+  --color-field: #77847c;
+  --color-door-sun: #e0b84a;
+}
+[data-look="modern"] .bg-harbour,
+[data-look="modern"] .bg-harbour-dark {
+  --color-harbour: #c9dce8;
+  --color-harbour-dark: #c8d5c0;
+  --color-white: var(--modern-ink);
+  --color-sky: #34443b;
+}
+[data-look="modern"] :is(a, button).bg-harbour {
+  --color-harbour: var(--modern-ink);
+  --color-harbour-dark: #1f2b25;
+  --color-white: #ffffff;
+}
+[data-look="modern"] footer.bg-harbour {
+  --color-harbour: #e8c9c8;
+  --color-sun: var(--modern-ink);
+}
+[data-look="modern"] .bg-harbour-dark {
+  --color-harbour-dark: #c8d5c0;
+}
+[data-look="modern"] .btn-sun {
+  background: var(--modern-ink);
+  color: #ffffff;
+}
+[data-look="modern"] .btn-outline-light {
+  background: rgb(255 255 255 / 0.6);
+  color: var(--modern-ink);
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-look="modern"] .btn-sun:hover {
+    background: #415549;
+  }
+  [data-look="modern"] .btn-outline-light:hover {
+    background: rgb(255 255 255 / 0.85);
+  }
+}
+[data-look="modern"] .bg-harbour .text-sun {
+  color: var(--modern-ink);
+}
+[data-look="modern"] .bg-harbour :focus-visible {
+  outline-color: var(--modern-ink);
+}
+
+:root[data-look="cream"] body {
+  background: #f8f7f2;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Keep anchor targets clear of the sticky header. */
+  scroll-padding-top: 6rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Directional padding only, so Tailwind's py-* utilities still apply. */
+.wrap {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .wrap {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 52px;
+  padding: 0.85rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    border-color 150ms ease,
+    transform 160ms var(--ease-out);
+}
+
+/* A small press so every button confirms the tap straight away. */
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--color-harbour);
+  color: #ffffff;
+}
+
+.btn-light {
+  background: var(--color-sky);
+  color: var(--color-harbour);
+}
+
+.btn-sun {
+  background: var(--color-sun);
+  color: var(--color-ink);
+}
+
+/* Secondary action on a green section: a lighter green fill, no outline. */
+.btn-outline-light {
+  background: rgb(255 255 255 / 0.12);
+  color: #ffffff;
+}
+
+/* Hover only where there is a real pointer, so taps on phones do not leave
+   buttons stuck in their hover colour. */
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover {
+    background: var(--color-harbour-dark);
+  }
+  .btn-light:hover {
+    background: color-mix(in srgb, var(--color-sky) 88%, var(--color-harbour));
+  }
+  .btn-sun:hover {
+    background: color-mix(in srgb, var(--color-sun) 80%, #ffffff);
+  }
+  .btn-outline-light:hover {
+    background: rgb(255 255 255 / 0.2);
+  }
+}
+
+/* Homepage hero: the supporting lines settle in once, in a short cascade.
+   The heading and portrait are left alone so the page paints at once. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.rise {
+  animation: rise 520ms var(--ease-out) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+/* The roof over Adam lifts into place as the page opens. It only
+   moves (no fade), so it never delays the first paint of the photo. */
+@keyframes sunrise {
+  from {
+    transform: translateY(28px);
+  }
+}
+.sunrise {
+  animation: sunrise 900ms var(--ease-out) both;
+}
+
+/* Photos fade in over their flat frame once loaded (FadeImage), never via a
+   blurred preview. Hidden only when scripts run. */
+img[data-fade] {
+  transition: opacity 450ms var(--ease-out);
+}
+
+/* Scroll reveals, driven by <Reveal>. Hidden only when scripts run, so the
+   content is always there without JavaScript. */
+@media (scripting: enabled) {
+  img[data-fade]:not([data-loaded]) {
+    opacity: 0;
+  }
+  [data-reveal="up"]:not([data-shown]) > * {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  [data-reveal="photo"]:not([data-shown]) {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+[data-reveal="up"] > * {
+  transition:
+    opacity 500ms var(--ease-out),
+    transform 500ms var(--ease-out);
+}
+[data-reveal="up"] > :nth-child(2) { transition-delay: 60ms; }
+[data-reveal="up"] > :nth-child(3) { transition-delay: 120ms; }
+[data-reveal="up"] > :nth-child(4) { transition-delay: 180ms; }
+[data-reveal="up"] > :nth-child(n + 5) { transition-delay: 240ms; }
+[data-reveal="photo"] {
+  transition: clip-path 800ms var(--ease-in-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation-name: fade;
+  }
+  .sunrise {
+    animation: none;
+  }
+  [data-reveal="up"]:not([data-shown]) > * {
+    opacity: 1;
+    transform: none;
+  }
+  [data-reveal="photo"]:not([data-shown]) {
+    clip-path: none;
+  }
+  .btn:active {
+    transform: none;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Tailwind v4 resets buttons to the default cursor. */
+button:not(:disabled),
+summary {
+  cursor: pointer;
+}
+
+/* Harbour on light backgrounds and sunlight on harbour ones, so the ring
+   always clears 3:1 against what sits behind it (sun-deep on white is 2.2:1). */
+:focus-visible {
+  outline: 3px solid var(--color-harbour);
+  outline-offset: 2px;
+}
+.bg-harbour :focus-visible {
+  outline-color: var(--color-sun);
+}
+
+.prose-moore p,
+.prose-moore li {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-muted);
+}
+
+/* Blog articles. */
+.article > * + * {
+  margin-top: 1.25rem;
+}
+.article h2 {
+  margin-top: 3rem;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--color-harbour);
+}
+.article h3 {
+  margin-top: 2rem;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--color-harbour);
+}
+.article p,
+.article li {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: var(--color-body);
+}
+.article ul,
+.article ol {
+  padding-left: 1.4rem;
+}
+.article ul {
+  list-style: disc;
+}
+.article ol {
+  list-style: decimal;
+}
+.article li + li {
+  margin-top: 0.5rem;
+}
+.article li::marker {
+  color: var(--color-harbour);
+}
+.article strong {
+  color: var(--color-ink);
+}
+.article a {
+  font-weight: 600;
+  color: var(--color-harbour);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .article a:hover {
+    text-decoration: none;
+  }
+}
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+.article th,
+.article td {
+  border-bottom: 1px solid var(--color-line);
+  padding: 0.65rem 0.75rem 0.65rem 0;
+  text-align: left;
+  vertical-align: top;
+}
+.article th {
+  color: var(--color-harbour);
+  font-weight: 700;
+}
+
+/* Brand artwork. The roofline versions are still in the markup (RoofFrame,
+   PageHero, RoofLogo) in case Adam asks to see them again, but every look now
+   uses the doorway: no roof, rounded photos and an arch around Adam. */
+.look-roof {
+  display: none !important;
+}
+
+.roof-clip {
+  clip-path: none !important;
+  margin-top: 0;
+  border-radius: 20px;
+}
+
+.roof-arch {
+  border-radius: 9999px 9999px 0 0;
+  border: 10px solid var(--color-harbour);
+  border-bottom: 0;
+}
+
+/* The border takes width from the frame, so let the photo fill its height. */
+.roof-arch img {
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.portrait-hero {
+  border-radius: 9999px 9999px 0 0;
+  background: var(--color-sun);
+  padding: 1.5rem 1.5rem 0;
+}
+
+@media (min-width: 640px) {
+  .portrait-hero {
+    padding: 2.25rem 2.25rem 0;
+  }
+}
+
+/* Lender logos: one-colour silhouettes masked in the look's colour, scrolling slowly. */
+.lender-track {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.lender-rail {
+  display: flex;
+  width: max-content;
+  animation: lender-scroll 60s linear infinite;
+}
+.lender-track:hover .lender-rail {
+  animation-play-state: paused;
+}
+.lender-list {
+  display: flex;
+  align-items: center;
+  gap: 3.5rem;
+  padding-right: 3.5rem;
+}
+.lender-logo {
+  display: block;
+  background: var(--color-harbour);
+  opacity: 0.85;
+  mask: var(--logo) center / contain no-repeat;
+}
+@keyframes lender-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lender-track {
+    mask-image: none;
+  }
+  .lender-rail {
+    width: auto;
+    animation: none;
+  }
+  .lender-list {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem 3rem;
+    padding-inline: 1.25rem;
+  }
+  .lender-list[aria-hidden] {
+    display: none;
+  }
+}
