@@ -8,7 +8,7 @@ import { CtaBand, Faq, HeroActions, PageHero } from "@/components/sections";
 import { posts } from "@/lib/blog";
 import type { enquiryGoals } from "@/lib/enquiry";
 import { photos, type Photo } from "@/lib/photos";
-import { btlRegulationNote, mortgageServices } from "@/lib/site";
+import { btlRegulationNote, mortgageServices, repossessionWarning } from "@/lib/site";
 
 export const dynamicParams = false;
 
@@ -51,7 +51,7 @@ export default async function ServicePage({ params }: PageProps<"/mortgages/[slu
 
   return (
     <>
-      <PageHero title={service.name} intro={service.intro} photo={photoFor[service.slug]}>
+      <PageHero title={service.name} intro={service.intro} photo={photoFor[service.slug]} warning={repossessionWarning}>
         <HeroActions />
       </PageHero>
 

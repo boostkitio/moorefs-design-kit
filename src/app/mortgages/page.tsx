@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { CtaBand, HeroActions, PageHero } from "@/components/sections";
 import { photos } from "@/lib/photos";
-import { mortgageServices } from "@/lib/site";
+import { mortgageServices, repossessionWarning } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Mortgage advice",
@@ -19,6 +19,7 @@ export default function MortgagesPage() {
         title="Mortgage advice for every move"
         photo={photos.mansionTrees}
         intro="I search the whole of the market, explain your options in plain English and handle the application from start to finish."
+        warning={repossessionWarning}
       >
         <HeroActions />
       </PageHero>

@@ -609,51 +609,17 @@ summary {
   }
 }
 
-/* Lender logos: one-colour silhouettes masked in the look's colour, scrolling slowly. */
-.lender-track {
-  overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-}
-.lender-rail {
-  display: flex;
-  width: max-content;
-  animation: lender-scroll 60s linear infinite;
-}
-.lender-track:hover .lender-rail {
-  animation-play-state: paused;
-}
+/* Lender logos: one-colour silhouettes masked in the look's colour, in one still row. */
 .lender-list {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 3.5rem;
-  padding-right: 3.5rem;
+  justify-content: center;
+  gap: 2rem 3.5rem;
 }
 .lender-logo {
   display: block;
   background: var(--color-harbour);
   opacity: 0.85;
   mask: var(--logo) center / contain no-repeat;
-}
-@keyframes lender-scroll {
-  to {
-    transform: translateX(-50%);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .lender-track {
-    mask-image: none;
-  }
-  .lender-rail {
-    width: auto;
-    animation: none;
-  }
-  .lender-list {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem 3rem;
-    padding-inline: 1.25rem;
-  }
-  .lender-list[aria-hidden] {
-    display: none;
-  }
 }

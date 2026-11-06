@@ -14,11 +14,14 @@ export function PageHero({
   title,
   intro,
   photo,
+  warning,
   children,
 }: {
   title: string;
   intro: string;
   photo?: PhotoData;
+  /** A risk warning shown in large type under the intro (the network asked for this on mortgage pages). */
+  warning?: string;
   children?: ReactNode;
 }) {
   return (
@@ -37,6 +40,7 @@ export function PageHero({
             {title}
           </h1>
           <p className="rise max-w-2xl text-xl leading-relaxed text-body">{intro}</p>
+          {warning && <p className="max-w-2xl text-xl font-bold leading-snug text-harbour md:text-2xl">{warning}</p>}
           {children && <div className="rise flex flex-col gap-5">{children}</div>}
         </div>
         {photo ? (
